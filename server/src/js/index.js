@@ -7,11 +7,10 @@ const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const typeorm_1 = require("typeorm");
 const handle_1 = require("./handle");
+const path_1 = __importDefault(require("path"));
+const accounsRouter_1 = __importDefault(require("./router/accounsRouter"));
 const app = express_1.default();
-app.use((req, res) => {
-    res.send('Hello World');
-});
-app.use(express_1.default.static('/public'));
+app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../public')));
 app.use(express_1.default.json());
 app.use(express_session_1.default({
     secret: 'chickenisgood',
@@ -19,7 +18,18 @@ app.use(express_session_1.default({
     saveUninitialized: false
 }));
 app.use((req, res, next) => {
+    console.log('바디', req.body, req.params, req.query);
     next();
+});
+app.use('/accounts', accounsRouter_1.default);
+app.use((req, res, next) => {
+    if (req.method === "GET") {
+        res.type("html");
+        res.sendFile(path_1.default.resolve(__dirname, '../../public/spa.html'));
+    }
+    else {
+        next();
+    }
 });
 typeorm_1.createConnection()
     .then((connection) => {

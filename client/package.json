@@ -4,8 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/bootstrap": "^5.0.0",
+    "@types/jquery": "^3.5.4",
+    "@types/react": "^17.0.0",
+    "@types/react-bootstrap": "^0.32.24",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.6",
+    "bootstrap": "^4.5.3",
+    "css-loader": "^5.0.1",
+    "jquery": "^3.5.1",
+    "react": "^17.0.1",
+    "react-bootstrap": "^1.4.0",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "webpack": "^5.6.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.2.0"
+  }
 }

@@ -56,13 +56,16 @@ router.route('') //create
         const accountRepo = handle_1.Handle.dbConnection.getRepository(account_1.Account);
         try {
             const account = await accountRepo.findOne({ username: username });
-            message.code = 1; // 같은 아이디 이미 존재
-            return;
+            if (account !== undefined) {
+                message.code = 1;
+                return;
+            }
         }
         catch (err) {
         }
         try {
             const account = await accountRepo.create({ username: username, password: password });
+            accountRepo.save(account);
         }
         catch (err) {
             message.code = message_1.Message.DefaultCode.ACTION_FAIL;
