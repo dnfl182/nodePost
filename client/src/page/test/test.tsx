@@ -1,7 +1,6 @@
-import { ajax } from 'jquery';
 import React from 'react'
 import { ButtonGroup, ToggleButton } from 'react-bootstrap';
-import { AJAX } from '../ajax/ajax';
+import { AJAX } from '../../ajax/ajax';
 export class Test extends React.Component<{},{
     method: string;
     url: string;

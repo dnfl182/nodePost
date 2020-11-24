@@ -3,7 +3,8 @@ import session from 'express-session'
 import {createConnection, Connection} from 'typeorm';
 import { Handle } from './handle';
 import path from 'path'
-import accountsRouter from './router/accounsRouter'
+import accountsRouter from './router/accountsRouter'
+import postsRouter from './router/postsRouter'
 const app = express();
 app.use(express.static(path.resolve(__dirname, '../../public')));
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
     next();
 })
 app.use('/accounts', accountsRouter);
+app.use('/posts', postsRouter);
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     if(req.method === "GET") {

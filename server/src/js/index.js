@@ -8,7 +8,8 @@ const express_session_1 = __importDefault(require("express-session"));
 const typeorm_1 = require("typeorm");
 const handle_1 = require("./handle");
 const path_1 = __importDefault(require("path"));
-const accounsRouter_1 = __importDefault(require("./router/accounsRouter"));
+const accountsRouter_1 = __importDefault(require("./router/accountsRouter"));
+const postsRouter_1 = __importDefault(require("./router/postsRouter"));
 const app = express_1.default();
 app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../public')));
 app.use(express_1.default.json());
@@ -21,7 +22,8 @@ app.use((req, res, next) => {
     console.log('바디', req.body, req.params, req.query);
     next();
 });
-app.use('/accounts', accounsRouter_1.default);
+app.use('/accounts', accountsRouter_1.default);
+app.use('/posts', postsRouter_1.default);
 app.use((req, res, next) => {
     if (req.method === "GET") {
         res.type("html");

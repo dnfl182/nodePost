@@ -8,13 +8,14 @@ var DefaultCode;
     DefaultCode[DefaultCode["VALIDATION_ERROR"] = 1001] = "VALIDATION_ERROR";
     DefaultCode[DefaultCode["NOT_FOUND"] = 1002] = "NOT_FOUND";
     DefaultCode[DefaultCode["ACTION_FAIL"] = 1003] = "ACTION_FAIL";
+    DefaultCode[DefaultCode["PERMISSION_ERROR"] = 1004] = "PERMISSION_ERROR";
 })(DefaultCode || (DefaultCode = {}));
 class Message {
     constructor(code, data) {
         this.code = code;
         this.data = data;
     }
-    toData() {
+    serialize() {
         return {
             code: this.code,
             data: this.data

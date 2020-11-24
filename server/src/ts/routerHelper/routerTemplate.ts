@@ -12,18 +12,9 @@ export class RouterTemplate {
             let flagValidationError = false;
             if(option.validations) {
                 for(const validation of option.validations) {
-                    console.log(validation);
-                    if(!validation.location) {
-                        validation.location = 'body';
-                    }
                     let value = undefined;
-                    if(validation.location === 'body') {
-                        value = req.body[validation.name];
-                    } else if(validation.location === 'params') {
-                        value = req.params[validation.name];
-                    } else if(validation.location === 'query') {
-                        value = req.query[validation.name];
-                    }
+                    value = req.body[validation.name];
+
                     if(validation.isVital === undefined) {
                         validation.isVital = true;
                     }
@@ -53,12 +44,13 @@ export class RouterTemplate {
             }
             if(flagValidationError) {
                 message.code = Message.DefaultCode.VALIDATION_ERROR;
-                res.json(message.toData());
+                res.contentType("application/json");
+                res.json(message.serialize());
                 return;
             }
-            console.log('훅 실행');
             await option.hook(req, res, message);
-            res.json(message.toData());
+            res.contentType("application/json");
+            res.json(message.serialize());
         }
     }
 }
@@ -67,5 +59,4 @@ export interface ValidationOption {
     isVital?: boolean;  //default true;
     type?: string;      //default string;
     regex?: RegExp;     //default null (type == string if you want to use);
-    location?: string;  //default body
 }

@@ -26,7 +26,7 @@ __decorate([
 ], Post.prototype, "title", void 0);
 __decorate([
     typeorm_1.Column({
-        length: 128
+        length: 500
     }),
     __metadata("design:type", String)
 ], Post.prototype, "content", void 0);

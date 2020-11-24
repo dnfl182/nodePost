@@ -52919,11 +52919,12 @@ var AJAX = /** @class */ (function () {
                         xhr.open(method, url);
                         xhr.onreadystatechange = function () {
                             if (xhr.readyState == 4) {
-                                if (xhr.responseType === "json") {
-                                    resolve(JSON.stringify(xhr.response));
+                                try {
+                                    resolve(JSON.parse(xhr.response));
                                 }
-                                else {
-                                    resolve(xhr.response);
+                                catch (err) {
+                                    console.error('AJAX: JSON 아닌 데이터 침입');
+                                    reject();
                                 }
                             }
                         };
@@ -52931,14 +52932,69 @@ var AJAX = /** @class */ (function () {
                             reject();
                         };
                         xhr.setRequestHeader('Content-Type', 'application/json');
-                        xhr.send(JSON.stringify(data));
+                        if (data) {
+                            xhr.send(JSON.stringify(data));
+                        }
+                        else {
+                            xhr.send();
+                        }
                     })];
             });
         });
     };
+    AJAX.Method = {
+        GET: 'GET',
+        POST: 'POST',
+        PATCH: 'PATCH',
+        PUT: 'PUT',
+        DELETE: 'DELETE'
+    };
     return AJAX;
 }());
 exports.AJAX = AJAX;
+
+
+/***/ }),
+
+/***/ "./src/ajax/message.ts":
+/*!*****************************!*\
+  !*** ./src/ajax/message.ts ***!
+  \*****************************/
+/*! flagged exports */
+/*! export Message [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Message = void 0;
+//0~1000 라우터 재량 영역
+var DefaultCode;
+(function (DefaultCode) {
+    DefaultCode[DefaultCode["SUCCESS"] = 1000] = "SUCCESS";
+    DefaultCode[DefaultCode["VALIDATION_ERROR"] = 1001] = "VALIDATION_ERROR";
+    DefaultCode[DefaultCode["NOT_FOUND"] = 1002] = "NOT_FOUND";
+    DefaultCode[DefaultCode["ACTION_FAIL"] = 1003] = "ACTION_FAIL";
+    DefaultCode[DefaultCode["PERMISSION_ERROR"] = 1004] = "PERMISSION_ERROR";
+})(DefaultCode || (DefaultCode = {}));
+var Message = /** @class */ (function () {
+    function Message(code, data) {
+        this.code = code;
+        this.data = data;
+    }
+    Message.prototype.serialize = function () {
+        return {
+            code: this.code,
+            data: this.data
+        };
+    };
+    Message.DefaultCode = DefaultCode;
+    return Message;
+}());
+exports.Message = Message;
 
 
 /***/ }),
@@ -52971,10 +53027,908 @@ react_dom_1.default.render(react_1.default.createElement(router_1.Router, null),
 
 /***/ }),
 
-/***/ "./src/page/test.tsx":
-/*!***************************!*\
-  !*** ./src/page/test.tsx ***!
-  \***************************/
+/***/ "./src/page/accounts/login.tsx":
+/*!*************************************!*\
+  !*** ./src/page/accounts/login.tsx ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:17-21 */
+/*! CommonJS bailout: this is used directly at 24:19-23 */
+/*! CommonJS bailout: this is used directly at 51:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Login = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var accountsRequest_1 = __webpack_require__(/*! ../../request/accountsRequest */ "./src/request/accountsRequest.ts");
+var Login = /** @class */ (function (_super) {
+    __extends(Login, _super);
+    function Login() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.login = function () { return __awaiter(_this, void 0, void 0, function () {
+            var username, password, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        username = document.getElementById('inputUsername').value;
+                        password = document.getElementById('inputPassword').value;
+                        return [4 /*yield*/, accountsRequest_1.AccountsRequest.login(username, password)];
+                    case 1:
+                        result = _a.sent();
+                        if (result) {
+                            document.getElementById('textError').innerHTML = '';
+                            document.getElementById('textSuccess').innerHTML = "로그인에 성공하였습니다.";
+                            setTimeout(function () {
+                                location.href = "#/";
+                            }, 500);
+                        }
+                        else {
+                            document.getElementById('textSuccess').innerHTML = '';
+                            document.getElementById('textError').innerHTML = "로그인에 실패하였습니다..";
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        return _this;
+    }
+    Login.prototype.render = function () {
+        return (react_1.default.createElement("div", { className: 'w-75 mx-auto container' },
+            react_1.default.createElement("div", { className: "form-row form-group" },
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputUsername" }, " \uC544\uC774\uB514 "),
+                    react_1.default.createElement("input", { type: "text", className: "form-control", id: "inputUsername" })),
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputPassword" }, " \uBE44\uBC00\uBC88\uD638 "),
+                    react_1.default.createElement("input", { type: "password", className: "form-control", id: "inputPassword" })),
+                react_1.default.createElement("div", { className: "col-9 text-center" },
+                    react_1.default.createElement("button", { className: "btn btn-primary w-100", onClick: this.login }, "\uB85C\uADF8\uC778")),
+                react_1.default.createElement("div", { className: "col-3 text-center" },
+                    react_1.default.createElement("a", { href: "#accounts/register" },
+                        react_1.default.createElement("button", { className: "btn btn-warning w-100" }, "\uD68C\uC6D0\uAC00\uC785"))),
+                react_1.default.createElement("h3", { className: "text-success", id: "textSuccess" }),
+                react_1.default.createElement("h3", { className: "text-danger", id: "textError" }))));
+    };
+    return Login;
+}(react_1.default.Component));
+exports.Login = Login;
+
+
+/***/ }),
+
+/***/ "./src/page/accounts/register.tsx":
+/*!****************************************!*\
+  !*** ./src/page/accounts/register.tsx ***!
+  \****************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:17-21 */
+/*! CommonJS bailout: this is used directly at 24:19-23 */
+/*! CommonJS bailout: this is used directly at 51:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Register = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var accountsRequest_1 = __webpack_require__(/*! ../../request/accountsRequest */ "./src/request/accountsRequest.ts");
+var Register = /** @class */ (function (_super) {
+    __extends(Register, _super);
+    function Register() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.register = function () { return __awaiter(_this, void 0, void 0, function () {
+            var username, password, rePassword, isExistUsernameResult, registerResult;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        username = document.getElementById('inputUsername').value;
+                        password = document.getElementById('inputPassword').value;
+                        rePassword = document.getElementById('inputRePassword').value;
+                        if (password !== rePassword) {
+                            this.error('비밀번호를 다시확인해주세여');
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, accountsRequest_1.AccountsRequest.isExistUsername(username)];
+                    case 1:
+                        isExistUsernameResult = _a.sent();
+                        if (isExistUsernameResult === undefined) {
+                            this.error('잠시후 다시 시도해 주세요');
+                            return [2 /*return*/];
+                        }
+                        if (!isExistUsernameResult) {
+                            this.error('아이디가 중복되었습니다. 다른 아이디를 입력해주세요.');
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, accountsRequest_1.AccountsRequest.register(username, password)];
+                    case 2:
+                        registerResult = _a.sent();
+                        if (registerResult) {
+                            this.success("회원가입 성공하였습니다.");
+                            setTimeout(function () { return location.href = "#/accounts/login"; }, 500);
+                        }
+                        else {
+                            this.error("회원가입 실패하였습니다.");
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.error = function (message) {
+            document.getElementById('textSuccess').innerHTML = '';
+            document.getElementById('textError').innerHTML = message;
+        };
+        _this.success = function (message) {
+            document.getElementById('textError').innerHTML = '';
+            document.getElementById('textSuccess').innerHTML = message;
+        };
+        return _this;
+    }
+    Register.prototype.render = function () {
+        return (react_1.default.createElement("div", { className: 'w-75 mx-auto container' },
+            react_1.default.createElement("div", { className: "form-row form-group" },
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputUsername" }, " \uC544\uC774\uB514 "),
+                    react_1.default.createElement("input", { type: "text", className: "form-control", id: "inputUsername" })),
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputPassword" }, " \uBE44\uBC00\uBC88\uD638 "),
+                    react_1.default.createElement("input", { type: "password", className: "form-control", id: "inputPassword" })),
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputRePassword" }, " \uBE44\uBC00\uBC88\uD638 \uD655\uC778 "),
+                    react_1.default.createElement("input", { type: "password", className: "form-control", id: "inputRePassword" })),
+                react_1.default.createElement("div", { className: "col-12 text-center" },
+                    react_1.default.createElement("button", { onClick: this.register, className: "btn btn-warning w-100" }, "\uD68C\uC6D0\uAC00\uC785")),
+                react_1.default.createElement("h3", { className: "text-success", id: "textSuccess" }),
+                react_1.default.createElement("h3", { className: "text-danger", id: "textError" }))));
+    };
+    return Register;
+}(react_1.default.Component));
+exports.Register = Register;
+
+
+/***/ }),
+
+/***/ "./src/page/app.tsx":
+/*!**************************!*\
+  !*** ./src/page/app.tsx ***!
+  \**************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.App = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var nav_1 = __webpack_require__(/*! ./nav/nav */ "./src/page/nav/nav.tsx");
+var App = /** @class */ (function (_super) {
+    __extends(App, _super);
+    function App(props) {
+        return _super.call(this, props) || this;
+    }
+    App.prototype.render = function () {
+        return (react_1.default.createElement("div", null,
+            react_1.default.createElement(nav_1.Nav, null),
+            this.props.children));
+    };
+    return App;
+}(react_1.default.Component));
+exports.App = App;
+
+
+/***/ }),
+
+/***/ "./src/page/nav/nav.tsx":
+/*!******************************!*\
+  !*** ./src/page/nav/nav.tsx ***!
+  \******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:16-20 */
+/*! CommonJS bailout: this is used directly at 26:17-21 */
+/*! CommonJS bailout: this is used directly at 35:19-23 */
+/*! CommonJS bailout: this is used directly at 62:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Nav = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var accountsRequest_1 = __webpack_require__(/*! ../../request/accountsRequest */ "./src/request/accountsRequest.ts");
+var Nav = /** @class */ (function (_super) {
+    __extends(Nav, _super);
+    function Nav(props) {
+        var _this = _super.call(this, props) || this;
+        _this.updateIsLogined = function () { return __awaiter(_this, void 0, void 0, function () {
+            var isLogiend;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, accountsRequest_1.AccountsRequest.isLogined()];
+                    case 1:
+                        isLogiend = _a.sent();
+                        if (isLogiend === undefined) {
+                            isLogiend = false;
+                        }
+                        this.setState(function (state) {
+                            var newState = __assign({}, state);
+                            newState.isLogined = isLogiend;
+                            return newState;
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.logout = function () { return __awaiter(_this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, accountsRequest_1.AccountsRequest.logout()];
+                    case 1:
+                        result = _a.sent();
+                        if (result === true) {
+                            this.setState(function (state) {
+                                var newState = __assign({}, state);
+                                newState.isLogined = false;
+                                return newState;
+                            });
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.state = {
+            isLogined: false
+        };
+        _this.updateIsLogined();
+        return _this;
+    }
+    Nav.prototype.render = function () {
+        var _this = this;
+        return (react_1.default.createElement("div", { className: 'w-100 mb-3', style: { background: "#333333", height: "100px" } },
+            react_1.default.createElement("div", { className: "row h-100" },
+                react_1.default.createElement("div", { className: "col-sm-6 col-lg-3 offset-lg-1" },
+                    react_1.default.createElement("a", { href: "#/" },
+                        react_1.default.createElement("h1", { className: "display-3 text-white" }, "\uAC8C\uC2DC\uD310"))),
+                react_1.default.createElement("div", { className: "col-sm-6 col-lg-3 offset-lg-5 " }, ((function () {
+                    if (!_this.state.isLogined) {
+                        return (react_1.default.createElement("a", { href: "#/accounts/login" },
+                            react_1.default.createElement("button", { className: "btn btn-lg btn-success w-100 h-100", style: { borderRadius: "0px" } }, " \uB85C\uADF8\uC778 ")));
+                    }
+                    else {
+                        return react_1.default.createElement("button", { onClick: _this.logout, className: "btn btn-lg btn-success w-100 h-100" }, " \uB85C\uADF8\uC544\uC6C3 ");
+                    }
+                })())))));
+    };
+    return Nav;
+}(react_1.default.Component));
+exports.Nav = Nav;
+
+
+/***/ }),
+
+/***/ "./src/page/posts/postCreate.tsx":
+/*!***************************************!*\
+  !*** ./src/page/posts/postCreate.tsx ***!
+  \***************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:17-21 */
+/*! CommonJS bailout: this is used directly at 24:19-23 */
+/*! CommonJS bailout: this is used directly at 51:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PostCreate = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var postsRequest_1 = __webpack_require__(/*! ../../request/postsRequest */ "./src/request/postsRequest.ts");
+var PostCreate = /** @class */ (function (_super) {
+    __extends(PostCreate, _super);
+    function PostCreate() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.create = function () { return __awaiter(_this, void 0, void 0, function () {
+            var title, content, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        title = document.getElementById('inputTitle').value;
+                        content = document.getElementById('inputContent').value;
+                        console.log(title, content);
+                        return [4 /*yield*/, postsRequest_1.PostsRequest.create(title, content)];
+                    case 1:
+                        result = _a.sent();
+                        if (result) {
+                            this.success('글이 작성되었습니다.');
+                            setTimeout(function () {
+                                location.href = "#/posts/page/1";
+                                history.go(0);
+                            }, 500);
+                        }
+                        else {
+                            this.error('실패하였습니다.');
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.error = function (message) {
+            document.getElementById('textSuccess').innerHTML = '';
+            document.getElementById('textError').innerHTML = message;
+        };
+        _this.success = function (message) {
+            document.getElementById('textError').innerHTML = '';
+            document.getElementById('textSuccess').innerHTML = message;
+        };
+        return _this;
+    }
+    PostCreate.prototype.render = function () {
+        return (react_1.default.createElement("div", { className: 'w-75 mx-auto container' },
+            react_1.default.createElement("div", { className: "form-row form-group" },
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputTitle" }, " \uC81C\uBAA9 "),
+                    react_1.default.createElement("input", { type: "text", className: "form-control", id: "inputTitle" })),
+                react_1.default.createElement("div", { className: "col-12 form-group" },
+                    react_1.default.createElement("label", { htmlFor: "inputContent" }, " \uBCF8\uBB38 "),
+                    react_1.default.createElement("textarea", { style: { height: "300px" }, className: "form-control", id: "inputContent" })),
+                react_1.default.createElement("div", { className: "col-12 text-center" },
+                    react_1.default.createElement("button", { onClick: this.create, className: "btn btn-primary w-100" }, "\uC791\uC131")),
+                react_1.default.createElement("h3", { className: "text-success", id: "textSuccess" }),
+                react_1.default.createElement("h3", { className: "text-danger", id: "textError" }))));
+    };
+    return PostCreate;
+}(react_1.default.Component));
+exports.PostCreate = PostCreate;
+
+
+/***/ }),
+
+/***/ "./src/page/posts/postPage.tsx":
+/*!*************************************!*\
+  !*** ./src/page/posts/postPage.tsx ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:16-20 */
+/*! CommonJS bailout: this is used directly at 26:17-21 */
+/*! CommonJS bailout: this is used directly at 35:19-23 */
+/*! CommonJS bailout: this is used directly at 62:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PostPage = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var postsRequest_1 = __webpack_require__(/*! ../../request/postsRequest */ "./src/request/postsRequest.ts");
+var PostPage = /** @class */ (function (_super) {
+    __extends(PostPage, _super);
+    function PostPage(props) {
+        var _this = _super.call(this, props) || this;
+        _this.isInited = true;
+        _this.update = function () { return __awaiter(_this, void 0, void 0, function () {
+            var maxPage, getPageResult, posts, _i, getPageResult_1, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, postsRequest_1.PostsRequest.getMaxPage()];
+                    case 1:
+                        maxPage = _a.sent();
+                        if (maxPage === undefined) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, postsRequest_1.PostsRequest.getPage(this.props.nowPage)];
+                    case 2:
+                        getPageResult = _a.sent();
+                        if (getPageResult === undefined) {
+                            return [2 /*return*/];
+                        }
+                        posts = [];
+                        for (_i = 0, getPageResult_1 = getPageResult; _i < getPageResult_1.length; _i++) {
+                            data = getPageResult_1[_i];
+                            posts.push({
+                                title: data.title,
+                                username: data.username,
+                                postId: data.id
+                            });
+                        }
+                        this.setState(function (state) {
+                            var newState = __assign({}, state);
+                            newState.maxPage = maxPage;
+                            newState.posts = posts;
+                            return newState;
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.getToRenderPages = function () {
+            var nowPage = _this.state.nowPage;
+            var maxPage = _this.state.maxPage;
+            var numSidePage = _this.state.numSidePage;
+            var pages = [];
+            for (var i = Math.max(1, nowPage - numSidePage); i < Math.min(maxPage, nowPage + numSidePage); i++) {
+                pages.push(i);
+            }
+            return pages;
+        };
+        _this.previousPage = function () {
+            if (_this.state.nowPage > 1) {
+                return react_1.default.createElement("li", { className: "page-item" },
+                    react_1.default.createElement("a", { className: "page-link", href: "#posts/page/" + (_this.state.nowPage - 1) }, "Prev"));
+            }
+        };
+        _this.nextPage = function () {
+            if (_this.state.nowPage < _this.state.maxPage) {
+                return react_1.default.createElement("li", { className: "page-item" },
+                    react_1.default.createElement("a", { className: "page-link", href: "#posts/page/" + (_this.state.nowPage + 1) }, "Next"));
+            }
+        };
+        _this.state = {
+            nowPage: _this.props.nowPage,
+            maxPage: 1,
+            numSidePage: 3,
+            posts: []
+        };
+        _this.update();
+        return _this;
+    }
+    PostPage.prototype.render = function () {
+        if (!this.isInited) {
+            return;
+        }
+        return (react_1.default.createElement("div", { className: 'w-75 mx-auto container' },
+            react_1.default.createElement("div", { className: "row" },
+                react_1.default.createElement("div", { className: "col-12 my-3" }, this.state.posts.map(function (post) {
+                    return (react_1.default.createElement("a", { href: "#/posts/" + post.postId },
+                        react_1.default.createElement("div", { className: "w-100 bg-primary text-white row" },
+                            react_1.default.createElement("div", { className: "col-12" },
+                                react_1.default.createElement("h1", null, post.title)),
+                            react_1.default.createElement("div", { className: "offset-9 col-3" },
+                                react_1.default.createElement("p", null, post.username)))));
+                })),
+                react_1.default.createElement("div", { className: "col-12" },
+                    react_1.default.createElement("nav", { "aria-label": "Page navigation example" },
+                        react_1.default.createElement("ul", { className: "pagination" },
+                            this.previousPage(),
+                            this.getToRenderPages().map(function (value, index) {
+                                return react_1.default.createElement("li", { className: "page-item" },
+                                    " ",
+                                    react_1.default.createElement("a", { className: "page-link", href: "#posts/page/" + value }, value));
+                            }),
+                            this.nextPage()))))));
+    };
+    return PostPage;
+}(react_1.default.Component));
+exports.PostPage = PostPage;
+
+
+/***/ }),
+
+/***/ "./src/page/posts/postShow.tsx":
+/*!*************************************!*\
+  !*** ./src/page/posts/postShow.tsx ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:17-21 */
+/*! CommonJS bailout: this is used directly at 24:19-23 */
+/*! CommonJS bailout: this is used directly at 51:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PostShow = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var postsRequest_1 = __webpack_require__(/*! ../../request/postsRequest */ "./src/request/postsRequest.ts");
+var PostShow = /** @class */ (function (_super) {
+    __extends(PostShow, _super);
+    function PostShow(props) {
+        var _this = _super.call(this, props) || this;
+        _this.loadPost = function () { return __awaiter(_this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, postsRequest_1.PostsRequest.get(this.props.postId)];
+                    case 1:
+                        result = _a.sent();
+                        console.log(result);
+                        if (result !== undefined) {
+                            document.getElementById('textTitle').innerHTML = result.title;
+                            document.getElementById('textUsername').innerHTML = "작성자: " + result.username;
+                            document.getElementById('textContent').innerHTML = result.content;
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        _this.loadPost();
+        return _this;
+    }
+    PostShow.prototype.render = function () {
+        return (react_1.default.createElement("div", { className: 'w-75 mx-auto container' },
+            react_1.default.createElement("div", { className: "row bordered" },
+                react_1.default.createElement("div", { className: "col-12 border-bottom" },
+                    react_1.default.createElement("h1", { id: "textTitle" }, " ")),
+                react_1.default.createElement("div", { className: "col-12 border-bottom" },
+                    react_1.default.createElement("p", { id: "textUsername" }, " ")),
+                react_1.default.createElement("div", { className: "col-12" },
+                    react_1.default.createElement("p", { id: "textContent" }, " ")))));
+    };
+    return PostShow;
+}(react_1.default.Component));
+exports.PostShow = PostShow;
+
+
+/***/ }),
+
+/***/ "./src/page/test/test.tsx":
+/*!********************************!*\
+  !*** ./src/page/test/test.tsx ***!
+  \********************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
 /*! CommonJS bailout: this is used directly at 2:17-21 */
@@ -53052,7 +54006,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Test = void 0;
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-var ajax_1 = __webpack_require__(/*! ../ajax/ajax */ "./src/ajax/ajax.ts");
+var ajax_1 = __webpack_require__(/*! ../../ajax/ajax */ "./src/ajax/ajax.ts");
 var Test = /** @class */ (function (_super) {
     __extends(Test, _super);
     function Test(prop) {
@@ -53207,6 +54161,397 @@ exports.Test = Test;
 
 /***/ }),
 
+/***/ "./src/page/warnnig.tsx":
+/*!******************************!*\
+  !*** ./src/page/warnnig.tsx ***!
+  \******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 15:23-27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Warning = void 0;
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var Warning = /** @class */ (function (_super) {
+    __extends(Warning, _super);
+    function Warning() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Warning.prototype.render = function () {
+        return (react_1.default.createElement("p", { className: "display-1" }, "\uC798\uBABB\uB41C \uC811\uADFC\uC785\uB2C8\uB2E4."));
+    };
+    return Warning;
+}(react_1.default.Component));
+exports.Warning = Warning;
+
+
+/***/ }),
+
+/***/ "./src/request/accountsRequest.ts":
+/*!****************************************!*\
+  !*** ./src/request/accountsRequest.ts ***!
+  \****************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 11:19-23 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AccountsRequest = void 0;
+var ajax_1 = __webpack_require__(/*! ../ajax/ajax */ "./src/ajax/ajax.ts");
+var message_1 = __webpack_require__(/*! ../ajax/message */ "./src/ajax/message.ts");
+var AccountsRequest = /** @class */ (function () {
+    function AccountsRequest() {
+    }
+    AccountsRequest.login = function (username, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.POST, '/accounts/login', {
+                            username: username,
+                            password: password
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code !== message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, true];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountsRequest.register = function (username, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.PUT, '/accounts', {
+                            username: username,
+                            password: password
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code !== message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, true];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountsRequest.logout = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.POST, '/accounts/logout')];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code !== message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, true];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountsRequest.isExistUsername = function (username) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.POST, '/accounts/isExistUsername', {
+                            username: username
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        console.log(result, typeof result);
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountsRequest.getAccount = function (accountId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.GET, "/accounts/" + accountId)];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AccountsRequest.isLogined = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.POST, "/accounts/isLogined")];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return AccountsRequest;
+}());
+exports.AccountsRequest = AccountsRequest;
+
+
+/***/ }),
+
+/***/ "./src/request/postsRequest.ts":
+/*!*************************************!*\
+  !*** ./src/request/postsRequest.ts ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: top-level-this-exports, __webpack_exports__, __webpack_require__ */
+/*! CommonJS bailout: this is used directly at 2:17-21 */
+/*! CommonJS bailout: this is used directly at 11:19-23 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PostsRequest = void 0;
+var ajax_1 = __webpack_require__(/*! ../ajax/ajax */ "./src/ajax/ajax.ts");
+var message_1 = __webpack_require__(/*! ../ajax/message */ "./src/ajax/message.ts");
+var PostsRequest = /** @class */ (function () {
+    function PostsRequest() {
+    }
+    PostsRequest.create = function (title, content) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.PUT, '/posts', {
+                            title: title,
+                            content: content
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code !== message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, true];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostsRequest.get = function (postId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.GET, "/posts/" + postId)];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostsRequest.delete = function (postId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.DELETE, "/posts/" + postId)];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code !== message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, true];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostsRequest.getPage = function (page) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.GET, "/posts/page/" + page)];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostsRequest.getMaxPage = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ajax_1.AJAX.ajax(ajax_1.AJAX.Method.GET, "/posts/page/max")];
+                    case 1:
+                        result = _a.sent();
+                        if (result.code === message_1.Message.DefaultCode.SUCCESS) {
+                            return [2 /*return*/, result.data];
+                        }
+                        else {
+                            return [2 /*return*/, undefined];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return PostsRequest;
+}());
+exports.PostsRequest = PostsRequest;
+
+
+/***/ }),
+
 /***/ "./src/router.tsx":
 /*!************************!*\
   !*** ./src/router.tsx ***!
@@ -53239,18 +54584,56 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Router = void 0;
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-var test_1 = __webpack_require__(/*! ./page/test */ "./src/page/test.tsx");
+var login_1 = __webpack_require__(/*! ./page/accounts/login */ "./src/page/accounts/login.tsx");
+var register_1 = __webpack_require__(/*! ./page/accounts/register */ "./src/page/accounts/register.tsx");
+var app_1 = __webpack_require__(/*! ./page/app */ "./src/page/app.tsx");
+var postCreate_1 = __webpack_require__(/*! ./page/posts/postCreate */ "./src/page/posts/postCreate.tsx");
+var postPage_1 = __webpack_require__(/*! ./page/posts/postPage */ "./src/page/posts/postPage.tsx");
+var postShow_1 = __webpack_require__(/*! ./page/posts/postShow */ "./src/page/posts/postShow.tsx");
+var test_1 = __webpack_require__(/*! ./page/test/test */ "./src/page/test/test.tsx");
+var warnnig_1 = __webpack_require__(/*! ./page/warnnig */ "./src/page/warnnig.tsx");
 var Router = /** @class */ (function (_super) {
     __extends(Router, _super);
     function Router() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Router.prototype.render = function () {
-        return (react_1.default.createElement(react_router_dom_1.BrowserRouter, null,
-            react_1.default.createElement(react_router_dom_1.Route, { exact: true, path: "/" },
-                react_1.default.createElement("p", null, " \uD648\uC785\uB2C8\uB2E4. ")),
-            react_1.default.createElement(react_router_dom_1.Route, { path: "/test" },
-                react_1.default.createElement(test_1.Test, null))));
+        return (react_1.default.createElement(react_router_dom_1.HashRouter, null,
+            react_1.default.createElement(react_router_dom_1.Route, { path: "/" },
+                react_1.default.createElement(app_1.App, null,
+                    react_1.default.createElement(react_router_dom_1.Route, { exact: true, path: "/" },
+                        react_1.default.createElement("p", null, " \uD648\uC785\uB2C8\uB2E4. ")),
+                    react_1.default.createElement(react_router_dom_1.Route, { path: "/accounts" },
+                        react_1.default.createElement(react_router_dom_1.HashRouter, { basename: "/accounts" },
+                            react_1.default.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.Login }),
+                            react_1.default.createElement(react_router_dom_1.Route, { path: "/register", component: register_1.Register }))),
+                    react_1.default.createElement(react_router_dom_1.Route, { path: "/posts" },
+                        react_1.default.createElement(react_router_dom_1.HashRouter, { basename: "/posts" },
+                            react_1.default.createElement(react_router_dom_1.Route, { path: "/create", component: postCreate_1.PostCreate }),
+                            react_1.default.createElement(react_router_dom_1.Route, { path: "/page/:nowPage", component: function (_a) {
+                                    var match = _a.match;
+                                    var params = match.params;
+                                    var nowPage = Number(params.nowPage);
+                                    if (Number.isNaN(nowPage)) {
+                                        return react_1.default.createElement(warnnig_1.Warning, null);
+                                    }
+                                    else {
+                                        return react_1.default.createElement(postPage_1.PostPage, { nowPage: nowPage });
+                                    }
+                                } }),
+                            react_1.default.createElement(react_router_dom_1.Route, { path: "/:postId", component: function (_a) {
+                                    var match = _a.match;
+                                    console.log("MATCH", match);
+                                    var params = match.params;
+                                    var postId = Number(params.postId);
+                                    if (Number.isNaN(postId)) {
+                                        return react_1.default.createElement(warnnig_1.Warning, null);
+                                    }
+                                    else {
+                                        return react_1.default.createElement(postShow_1.PostShow, { postId: postId });
+                                    }
+                                } }))))),
+            react_1.default.createElement(react_router_dom_1.Route, { path: "/test", component: test_1.Test })));
     };
     return Router;
 }(react_1.default.Component));

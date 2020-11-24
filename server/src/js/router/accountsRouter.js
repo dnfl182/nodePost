@@ -49,7 +49,7 @@ router.route('') //create
         {
             name: 'password',
             type: 'string',
-            regex: /[\w|\d]{128}/
+            regex: /[\w|\d]{1,128}/
         },
     ],
     hook: async (req, res, message) => {
@@ -81,7 +81,7 @@ router.route('/logout')
         req.session.accountId = undefined;
     }
 }));
-router.route('/checkUsername')
+router.route('/isExistUsername')
     .post(routerTemplate_1.RouterTemplate.create({
     validations: [
         {
@@ -95,11 +95,15 @@ router.route('/checkUsername')
         const accountRepo = handle_1.Handle.dbConnection.getRepository(account_1.Account);
         try {
             const account = await accountRepo.findOne({ username: username });
-            if (account === null) {
+            if (account === undefined) {
                 message.data = true;
+            }
+            else {
+                message.data = false;
             }
         }
         catch (err) {
+            console.log(err);
             message.code = message_1.Message.DefaultCode.ACTION_FAIL;
             return;
         }
@@ -133,5 +137,16 @@ router.route('/:accountId')
         }
     }
 }));
+router.route('/isLogined')
+    .post(routerTemplate_1.RouterTemplate.create({
+    hook: async (req, res, message) => {
+        if (req.session.accountId) {
+            message.data = true;
+        }
+        else {
+            message.data = false;
+        }
+    }
+}));
 exports.default = router;
-//# sourceMappingURL=accounsRouter.js.map
+//# sourceMappingURL=accountsRouter.js.map

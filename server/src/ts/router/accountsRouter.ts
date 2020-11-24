@@ -1,11 +1,12 @@
 import express from 'express';
+import validator from 'validator';
 import { Account } from '../entity/account';
 import { Handle } from '../handle';
 import { Message } from '../routerHelper/message';
 import { RouterTemplate } from '../routerHelper/routerTemplate';
 const router = express.Router();
 
-
+    // 로그인 회원가입시 RSA 공개 개인키 방식 ㄱ
 router.route('/login')
     .post(RouterTemplate.create({
         validations: [
@@ -17,7 +18,7 @@ router.route('/login')
             {
                 name: 'password',
                 type: 'string',
-                regex: /[\w|\d]{128}/
+                regex: /[\w|\d]{1,128}/
             },
         ],
         hook: async (req: express.Request, res: express.Response, message: Message) => {
@@ -26,7 +27,7 @@ router.route('/login')
             const accountRepo = Handle.dbConnection.getRepository(Account);
             try {
                 const account = await accountRepo.findOne({username: username, password: password});
-                req.session.userid = account.id;
+                req.session.accountId = account.id; // 세션 객체로 만들면 관리 좋음
             } catch (err) {
                 message.code = Message.DefaultCode.ACTION_FAIL;
             }
@@ -45,7 +46,7 @@ router.route('')    //create
             {
                 name: 'password',
                 type: 'string',
-                regex: /[\w|\d]{128}/
+                regex: /[\w|\d]{1,128}/
             },
         ],
         hook: async (req: express.Request, res: express.Response, message: Message) => {
@@ -73,12 +74,12 @@ router.route('')    //create
 router.route('/logout')
     .post(RouterTemplate.create({
         hook: async (req: express.Request, res: express.Response, message: Message) => {
-            req.session.userid = undefined;
+            req.session.accountId = undefined;
         }
     }));
 
 
-router.route('/checkUsername') 
+router.route('/isExistUsername') 
     .post(RouterTemplate.create({
         validations: [
             {
@@ -91,11 +92,56 @@ router.route('/checkUsername')
             const username = req.body.username;
             const accountRepo = Handle.dbConnection.getRepository(Account);
             try {
-                await accountRepo.findOne({username: username});    // 오류안나면 존재한다는뜻
-                message.data = true;
+                const account = await accountRepo.findOne({username: username});
+                if(account === undefined) {
+                    message.data = true;
+                } else {
+                    message.data = false;
+                }
             } catch (err) {
-                message.data = false;
+                console.log(err);
+                message.code = Message.DefaultCode.ACTION_FAIL;
+                return;
             }
         }
     }));
+
+router.route('/:accountId')
+    .get(RouterTemplate.create({
+    hook: async (req: express.Request, res: express.Response, message: Message) => {
+        if(!validator.isNumeric(req.params.accountId)) {
+            message.code = Message.DefaultCode.VALIDATION_ERROR;
+            return;
+        }
+        const accountId = Number(req.params.accountId);
+        const accountRepo = Handle.dbConnection.getRepository(Account);
+       
+        try {
+            const account = await accountRepo.findOne({id: accountId});
+            if(req.session.accountId == accountId) {    // 로그인되어있을경우와 아닐경우 분리
+                message.data = {
+                    ...account
+                }
+            } else {
+                message.data = {
+                    accountId: account.id,
+                    username: account.username
+                }
+            }
+        } catch (err) {
+            message.data = false;
+        }
+    }
+}));
+
+router.route('/isLogined')
+    .post(RouterTemplate.create({
+    hook: async (req: express.Request, res: express.Response, message: Message) => {
+        if(req.session.accountId) {
+            message.data = true;
+        } else {
+            message.data = false;
+        }
+    }
+}));
 export default router;
