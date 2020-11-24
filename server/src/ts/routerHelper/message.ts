@@ -1,6 +1,9 @@
+//0~1000 라우터 재량 영역
 enum DefaultCode {
-    SUCCESS,
-    VALIDATION_ERROR
+    SUCCESS = 1000,
+    VALIDATION_ERROR,
+    NOT_FOUND,
+    ACTION_FAIL
 }
 export class Message {
     constructor(public code: number, public data: any) {
