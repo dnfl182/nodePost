@@ -10,9 +10,31 @@ export class AJAX {
                     try {
                         resolve(JSON.parse(xhr.response));
                     } catch (err) {
-                        console.error('AJAX: JSON 아닌 데이터 침입')
+                        //console.error('AJAX: JSON 아닌 데이터 침입')
                         reject();
                     }
+                }
+            }
+            xhr.onerror = xhr.onabort = () => {
+                reject();
+            }
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            if(data) {
+                xhr.send(JSON.stringify(data));
+            } else {
+                xhr.send();
+            }
+        });
+    }
+    public static async ajaxReturnAny(method: string, url: string, data?: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState == 4) {
+                        resolve(xhr.response);
+                        //console.error('AJAX: JSON 아닌 데이터 침입')
                 }
             }
             xhr.onerror = xhr.onabort = () => {

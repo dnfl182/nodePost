@@ -52923,9 +52923,35 @@ var AJAX = /** @class */ (function () {
                                     resolve(JSON.parse(xhr.response));
                                 }
                                 catch (err) {
-                                    console.error('AJAX: JSON 아닌 데이터 침입');
+                                    //console.error('AJAX: JSON 아닌 데이터 침입')
                                     reject();
                                 }
+                            }
+                        };
+                        xhr.onerror = xhr.onabort = function () {
+                            reject();
+                        };
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        if (data) {
+                            xhr.send(JSON.stringify(data));
+                        }
+                        else {
+                            xhr.send();
+                        }
+                    })];
+            });
+        });
+    };
+    AJAX.ajaxReturnAny = function (method, url, data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open(method, url);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState == 4) {
+                                resolve(xhr.response);
+                                //console.error('AJAX: JSON 아닌 데이터 침입')
                             }
                         };
                         xhr.onerror = xhr.onabort = function () {
@@ -54227,13 +54253,13 @@ var Test = /** @class */ (function (_super) {
                 _this.setState(function (state) {
                     var newState = __assign({}, state);
                     newState.dataInfos[index].type = type;
-                    if (type == 'string') {
+                    if (type === 'string') {
                         newState.dataInfos[index].value = '';
                     }
-                    else if (type == 'number') {
+                    else if (type === 'number') {
                         newState.dataInfos[index].value = "0";
                     }
-                    else if (type == 'boolean') {
+                    else if (type === 'boolean') {
                         newState.dataInfos[index].value = "false";
                     }
                     return newState;
@@ -54259,9 +54285,9 @@ var Test = /** @class */ (function (_super) {
                             react_1.default.createElement("button", { className: "dropdown-item", onClick: onClickType(index, 'number') }, "number"),
                             react_1.default.createElement("button", { className: "dropdown-item", onClick: onClickType(index, 'boolean') }, "boolean"))),
                     react_1.default.createElement("div", { className: "col-5" },
-                        react_1.default.createElement("input", { type: "text", maxLength: 1024, id: "inputName" + index, className: "form-control", placeholder: "\uC774\uB984", defaultValue: dataInfo.name, onChange: onChangeDataInfo(index, 'name') })),
+                        react_1.default.createElement("input", { type: "text", maxLength: 1024, id: "inputName" + index, className: "form-control", placeholder: "\uC774\uB984", value: dataInfo.name, onChange: onChangeDataInfo(index, 'name') })),
                     react_1.default.createElement("div", { className: "col-5" },
-                        react_1.default.createElement("input", { type: getInputType(dataInfo.type), maxLength: 1024, id: "inputValue" + index, className: "form-control", placeholder: "\uB370\uC774\uD130", defaultValue: dataInfo.value, onChange: onChangeDataInfo(index, 'value') })),
+                        react_1.default.createElement("input", { type: getInputType(dataInfo.type), maxLength: 1024, id: "inputValue" + index, className: "form-control", placeholder: "\uB370\uC774\uD130", value: dataInfo.value, onChange: onChangeDataInfo(index, 'value') })),
                     react_1.default.createElement("div", { className: "col-2" },
                         react_1.default.createElement("button", { className: "btn btn-warning w-100", onClick: function (e) {
                                 _this.setState(function (state) {
@@ -54323,7 +54349,7 @@ var Test = /** @class */ (function (_super) {
                                                             data[dataInfo.name] = dataInfo.value;
                                                         }
                                                     }
-                                                    return [4 /*yield*/, ajax_1.AJAX.ajax(this.state.method, this.state.url, data)];
+                                                    return [4 /*yield*/, ajax_1.AJAX.ajaxReturnAny(this.state.method, this.state.url, data)];
                                                 case 1:
                                                     result = _b.sent();
                                                     this.setState(function (state) {
@@ -54336,7 +54362,7 @@ var Test = /** @class */ (function (_super) {
                                         });
                                     }); } }, " AJAX ")))),
                     react_1.default.createElement("div", { className: "col-12" },
-                        react_1.default.createElement("textarea", { className: "form-control w-100", defaultValue: this.state.result, readOnly: true }))))));
+                        react_1.default.createElement("textarea", { className: "form-control w-100", style: { height: "200px" }, defaultValue: this.state.result, readOnly: true }))))));
     };
     return Test;
 }(react_1.default.Component));

@@ -23,7 +23,8 @@ app.use(express_session_1.default({
 }));
 app.use((req, res, next) => {
     console.log('URL', req.url);
-    console.log('바디', req.body);
+    console.log('Body', req.body);
+    console.log();
     next();
 });
 app.use('/accounts', accountsRouter_1.default);
@@ -42,7 +43,7 @@ typeorm_1.createConnection()
     .then((connection) => {
     handle_1.Handle.dbConnection = connection;
     console.log("데이터 베이스 연결 성공");
-    app.listen(3000, () => {
+    app.listen(80, () => {
         console.log('LISTENING SUCCESS');
     });
 }).catch((err) => {

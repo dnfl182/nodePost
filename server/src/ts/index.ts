@@ -18,7 +18,8 @@ app.use(session({
 }));
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.log('URL', req.url);
-    console.log('바디', req.body);
+    console.log('Body', req.body);
+    console.log();
     next();
 })
 app.use('/accounts', accountsRouter);
@@ -37,7 +38,7 @@ createConnection()
 .then((connection: Connection) => {
     Handle.dbConnection = connection;
     console.log("데이터 베이스 연결 성공");
-    app.listen(3000, () => {
+    app.listen(80, () => {
         console.log('LISTENING SUCCESS'); 
     });
 }).catch((err: any) => {

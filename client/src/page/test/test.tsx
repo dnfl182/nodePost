@@ -43,11 +43,12 @@ export class Test extends React.Component<{},{
                 this.setState((state) => {
                     const newState = {...state};
                     newState.dataInfos[index].type = type;
-                    if(type == 'string') {
+
+                    if(type === 'string') {
                         newState.dataInfos[index].value = '';
-                    } else if(type == 'number') {
+                    } else if(type === 'number') {
                         newState.dataInfos[index].value = "0";
-                    } else if(type == 'boolean') {
+                    } else if(type === 'boolean') {
                         newState.dataInfos[index].value = "false";
                     }
                     return newState;
@@ -57,7 +58,7 @@ export class Test extends React.Component<{},{
         const onClickMethod = (method: string) => {
             return () => {
                 this.setState((state) => {
-                    let newState = {...state};
+                    const newState = {...state};
                     newState.method= method;
                     return newState;
                 });
@@ -76,10 +77,10 @@ export class Test extends React.Component<{},{
                             </div>
                         </div>
                         <div className ="col-5">
-                            <input type="text" maxLength = {1024} id={"inputName" + index} className="form-control" placeholder = "이름" defaultValue = {dataInfo.name} onChange = {onChangeDataInfo(index, 'name')}></input>
+                            <input type="text" maxLength = {1024} id={"inputName" + index} className="form-control" placeholder = "이름" value = {dataInfo.name} onChange = {onChangeDataInfo(index, 'name')}></input>
                         </div>
                         <div className ="col-5">
-                            <input type={getInputType(dataInfo.type)} maxLength = {1024} id={"inputValue" + index} className="form-control" placeholder = "데이터" defaultValue = {dataInfo.value} onChange = {onChangeDataInfo(index, 'value')}></input>
+                            <input type={getInputType(dataInfo.type)} maxLength = {1024} id={"inputValue" + index} className="form-control" placeholder = "데이터" value = {dataInfo.value} onChange = {onChangeDataInfo(index, 'value')}></input>
                         </div>
                         <div className ="col-2">
                             <button className ="btn btn-warning w-100" onClick = {
@@ -162,7 +163,7 @@ export class Test extends React.Component<{},{
                                                     data[dataInfo.name] = dataInfo.value;
                                                 }
                                             }
-                                            const result = await AJAX.ajax(this.state.method, this.state.url, data)
+                                            const result = await AJAX.ajaxReturnAny(this.state.method, this.state.url, data)
                                             this.setState((state) => {
                                                 const newState = {...state};
                                                 newState.result = result;
@@ -174,7 +175,7 @@ export class Test extends React.Component<{},{
                             </div>
                         </div>
                         <div className = "col-12">
-                                <textarea className = "form-control w-100" defaultValue = {this.state.result} readOnly>
+                                <textarea className = "form-control w-100" style = {{height: "200px"}} defaultValue = {this.state.result} readOnly>
                                 </textarea>
                         </div>
                     </div>
