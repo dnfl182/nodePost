@@ -17,7 +17,6 @@ router.route('/:postId')
             const postId: number = Number(req.params.postId);
             try {
                 const result = await createQueryBuilder('Post').where({id: postId}).select().innerJoinAndSelect("Post.account", "account").getOne();
-                console.log(result);
                 if(result === undefined) {
                     message.code = Message.DefaultCode.NOT_FOUND;
                     return;

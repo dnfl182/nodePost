@@ -12,6 +12,7 @@ export class Post{
         length: 3000
     })
     content: string;
+    
     @ManyToOne(type => Account, account => account.id)
     account: number;
 }

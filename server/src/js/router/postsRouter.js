@@ -21,7 +21,6 @@ router.route('/:postId')
         const postId = Number(req.params.postId);
         try {
             const result = await typeorm_1.createQueryBuilder('Post').where({ id: postId }).select().innerJoinAndSelect("Post.account", "account").getOne();
-            console.log(result);
             if (result === undefined) {
                 message.code = message_1.Message.DefaultCode.NOT_FOUND;
                 return;
