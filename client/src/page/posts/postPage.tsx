@@ -128,11 +128,11 @@ export class PostPage extends React.Component <{
                         this.state.posts.map((post, index) => {
                             return  (
                             <a href={`#/posts/${post.postId}`} key = {index}>
-                                <div className = "w-100 bg-primary text-white row mb-3">
-                                    <div className = "col-12">
+                                <div className = "w-100 bg-primary text-white row mb-3 overflow-hidden">
+                                    <div className = "col-12 text-truncate">
                                         <h1>{post.title}</h1>
                                     </div>
-                                    <div className = "offset-9 col-3">
+                                    <div className = "offset-9 col-3 text-truncate">
                                         <p>{post.username}</p>
                                     </div> 
                                 </div>

@@ -53904,10 +53904,10 @@ var PostPage = /** @class */ (function (_super) {
             react_1.default.createElement("div", { className: "w-100 row mb-3" }, this.renderBtnCreatePost()),
             react_1.default.createElement("div", { className: "w-100" }, this.state.posts.map(function (post, index) {
                 return (react_1.default.createElement("a", { href: "#/posts/" + post.postId, key: index },
-                    react_1.default.createElement("div", { className: "w-100 bg-primary text-white row mb-3" },
-                        react_1.default.createElement("div", { className: "col-12" },
+                    react_1.default.createElement("div", { className: "w-100 bg-primary text-white row mb-3 overflow-hidden" },
+                        react_1.default.createElement("div", { className: "col-12 text-truncate" },
                             react_1.default.createElement("h1", null, post.title)),
-                        react_1.default.createElement("div", { className: "offset-9 col-3" },
+                        react_1.default.createElement("div", { className: "offset-9 col-3 text-truncate" },
                             react_1.default.createElement("p", null, post.username)))));
             })),
             react_1.default.createElement("div", { className: "col-12" },
@@ -54121,9 +54121,11 @@ var PostShow = /** @class */ (function (_super) {
                 react_1.default.createElement("div", { className: "col-12 border-bottom" },
                     react_1.default.createElement("h1", { id: "textTitle" }, this.state.title)),
                 react_1.default.createElement("div", { className: "col-12 border-bottom" },
-                    react_1.default.createElement("p", { id: "textUsername" }, this.state.username)),
+                    react_1.default.createElement("p", { id: "textUsername" },
+                        "Writer: ",
+                        this.state.username)),
                 react_1.default.createElement("div", { className: "col-12 border-bottom" },
-                    react_1.default.createElement("pre", { id: "textContent" }, this.state.content)),
+                    react_1.default.createElement("pre", { className: "d-block", style: { wordWrap: "break-word" }, id: "textContent" }, this.state.content)),
                 this.renderBtnDeletePost()),
             react_1.default.createElement("h3", { className: "text-success", id: "textSuccess" }, this.state.textSuccess),
             react_1.default.createElement("h3", { className: "text-danger", id: "textError" }, this.state.textError)));
