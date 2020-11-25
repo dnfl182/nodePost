@@ -9,7 +9,7 @@ export class Post{
     })
     title: string;
     @Column({
-        length: 500
+        length: 3000
     })
     content: string;
     @ManyToOne(type => Account, account => account.id)

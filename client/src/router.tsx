@@ -1,5 +1,5 @@
 import React from 'react'
-import { HashRouter, Route } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import { Login } from './page/accounts/login';
 import { Register } from './page/accounts/register';
 import { App } from './page/app';
@@ -7,7 +7,6 @@ import { PostCreate } from './page/posts/postCreate';
 import { PostPage } from './page/posts/postPage';
 import { PostShow } from './page/posts/postShow';
 import { Test } from './page/test/test';
-import { Warning } from './page/warnnig';
 export class Router extends React.Component {
     render() {
         return (
@@ -15,7 +14,7 @@ export class Router extends React.Component {
                 <Route path = "/">
                     <App>
                         <Route exact path = "/">
-                            <p> 홈입니다. </p>
+                            <PostPage nowPage ={1} numSidePage = {3}/>
                         </Route>
                         <Route path = "/accounts">
                             <HashRouter basename = "/accounts">
@@ -25,30 +24,31 @@ export class Router extends React.Component {
                         </Route>
                         <Route path = "/posts">
                             <HashRouter basename = "/posts">
-                                <Route path = "/create" component = {PostCreate}/>
-                                <Route path = "/page/:nowPage" component = {
-                                    ({match}) => {
-                                        const params = match.params;
-                                        const nowPage = Number(params.nowPage);
-                                        if(Number.isNaN(nowPage)) {
-                                            return <Warning/>
-                                        } else {
-                                            return <PostPage nowPage = {nowPage}/>
+                                <Switch>
+                                    <Route exact path = "/create" component = {PostCreate}/>
+                                    <Route exact path = "/page/:nowPage" component = {
+                                        ({match}) => {
+                                            const params = match.params;
+                                            const nowPage = Number(params.nowPage);
+                                            if(Number.isNaN(nowPage)) {
+                                                return <div></div>;
+                                            } else {
+                                                return <PostPage nowPage = {nowPage} numSidePage = {3}/>
+                                            }
                                         }
-                                    }
-                                }/>
-                                <Route path = "/:postId" component = {
-                                    ({match}) => {
-                                        console.log("MATCH", match);
-                                        const params = match.params;
-                                        const postId = Number(params.postId);
-                                        if(Number.isNaN(postId)) {
-                                            return <Warning/>
-                                        } else {
-                                            return <PostShow postId = {postId}/>
-                                        }
-                                    }   
-                                }/>
+                                    }/>
+                                    <Route exact path = "/:postId" component = {
+                                            ({match}) => {
+                                                const params = match.params;
+                                                const postId = Number(params.postId);
+                                                if(Number.isNaN(postId)) {
+                                                    return <div></div>;
+                                                } else {
+                                                    return <PostShow postId = {postId}/>
+                                                }
+                                        }   
+                                    }/>
+                                </Switch>
                             </HashRouter>
                         </Route>
                     </App>

@@ -1,20 +1,48 @@
-import React, { InputHTMLAttributes } from 'react'
-import { AccountsRequest } from '../../request/accountsRequest';
-export class Login extends React.Component {
+import React from 'react'
+import { SessionRequest } from '../../request/sessionRequest';
+export class Login extends React.Component<{}, {
+    textError: string;
+    textSuccess: string;
+}> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            textError: '',
+            textSuccess: ''
+        };
+    }
     login = async () => {
-        const username = (document.getElementById('inputUsername') as HTMLInputElement).value;
+        const username = (document.getElementById('inputUsername') as HTMLInputElement).value;      
         const password = (document.getElementById('inputPassword') as HTMLInputElement).value;
-        const result = await AccountsRequest.login(username, password);
+        const result = await SessionRequest.login(username, password);
         if(result) {
-            document.getElementById('textError').innerHTML = '';
-            document.getElementById('textSuccess').innerHTML = "로그인에 성공하였습니다.";
+            this.updateSuccess("로그인에 성공하였습니다");
             setTimeout(() => {
                 location.href = "#/";
             }, 500);
         } else {
-            document.getElementById('textSuccess').innerHTML = '';
-            document.getElementById('textError').innerHTML = "로그인에 실패하였습니다..";
+            this.updateError("로그인에 실패하였습니다.")
         }
+    }
+    updateError = (text: string) => {
+        this.setState((state) => {
+            const newState = {
+                ...state
+            };
+            newState.textError = text;
+            newState.textSuccess = "";
+            return newState;
+        })
+    }
+    updateSuccess = (text: string) =>{
+        this.setState((state) => {
+            const newState = {
+                ...state
+            };
+            newState.textError = "";
+            newState.textSuccess = text;
+            return newState;
+        })
     }
     render() {
         return (
@@ -40,8 +68,8 @@ export class Login extends React.Component {
                         </button> 
                     </a>
                 </div>
-                <h3 className = "text-success"id="textSuccess"></h3>
-                <h3 className = "text-danger"id="textError"></h3>
+                <h3 className = "text-success"id="textSuccess">{this.state.textSuccess}</h3>
+                <h3 className = "text-danger"id="textError">{this.state.textError}</h3>
             </div>
         </div>
         );

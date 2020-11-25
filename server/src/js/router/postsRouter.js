@@ -16,10 +16,11 @@ router.route('/:postId')
     hook: async (req, res, message) => {
         if (!validator_1.default.isNumeric(req.params.postId)) {
             message.code = message_1.Message.DefaultCode.VALIDATION_ERROR;
+            return;
         }
         const postId = Number(req.params.postId);
         try {
-            const result = await typeorm_1.createQueryBuilder('Post').where({ id: postId }).innerJoinAndSelect("Post.account", "account").getOne();
+            const result = await typeorm_1.createQueryBuilder('Post').where({ id: postId }).select().innerJoinAndSelect("Post.account", "account").getOne();
             console.log(result);
             if (result === undefined) {
                 message.code = message_1.Message.DefaultCode.NOT_FOUND;
@@ -77,7 +78,7 @@ router.route('/')
         {
             name: 'content',
             type: 'string',
-            regex: /[\s\S]{1,500}/
+            regex: /[\s\S]{1,3000}/
         },
     ],
     hook: async (req, res, message) => {
@@ -108,15 +109,15 @@ router.route('/page/:page')
         if (validator_1.default.isNumeric(req.params.page)) {
             const page = Number(req.params.page);
             try {
-                const result = await typeorm_1.createQueryBuilder('post').orderBy('id', 'DESC')
+                const result = await typeorm_1.createQueryBuilder('Post').orderBy('Post.id', 'DESC')
                     .offset((page - 1) * ammountPerPage).limit(ammountPerPage).leftJoinAndSelect('Post.account', 'account').getMany();
                 const posts = [];
                 for (const post of result) {
                     posts.push({
-                        username: post["account"]["username"],
-                        title: post["account"],
+                        username: (post["account"]["username"]) ? post["account"]["username"] : "Unknown",
+                        title: post["title"],
                         content: post["content"],
-                        id: posts["id"]
+                        id: post["id"]
                     });
                 }
                 message.data = posts;

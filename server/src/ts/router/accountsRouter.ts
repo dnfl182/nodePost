@@ -6,35 +6,6 @@ import { Message } from '../routerHelper/message';
 import { RouterTemplate } from '../routerHelper/routerTemplate';
 const router = express.Router();
 
-    // 로그인 회원가입시 RSA 공개 개인키 방식 ㄱ
-router.route('/login')
-    .post(RouterTemplate.create({
-        validations: [
-            {
-                name: 'username',
-                type: 'string',
-                regex: /[\d|\w]{1,100}/
-            },
-            {
-                name: 'password',
-                type: 'string',
-                regex: /[\w|\d]{1,128}/
-            },
-        ],
-        hook: async (req: express.Request, res: express.Response, message: Message) => {
-            const username = req.body.username;
-            const password = req.body.password;
-            const accountRepo = Handle.dbConnection.getRepository(Account);
-            try {
-                const account = await accountRepo.findOne({username: username, password: password});
-                req.session.accountId = account.id; // 세션 객체로 만들면 관리 좋음
-            } catch (err) {
-                message.code = Message.DefaultCode.ACTION_FAIL;
-            }
-        }
-    }));
-
-
 router.route('')    //create
     .put(RouterTemplate.create({
         validations: [
@@ -70,14 +41,6 @@ router.route('')    //create
             }
         }
     }));
-
-router.route('/logout')
-    .post(RouterTemplate.create({
-        hook: async (req: express.Request, res: express.Response, message: Message) => {
-            req.session.accountId = undefined;
-        }
-    }));
-
 
 router.route('/isExistUsername') 
     .post(RouterTemplate.create({
@@ -129,17 +92,6 @@ router.route('/:accountId')
                 }
             }
         } catch (err) {
-            message.data = false;
-        }
-    }
-}));
-
-router.route('/isLogined')
-    .post(RouterTemplate.create({
-    hook: async (req: express.Request, res: express.Response, message: Message) => {
-        if(req.session.accountId) {
-            message.data = true;
-        } else {
             message.data = false;
         }
     }

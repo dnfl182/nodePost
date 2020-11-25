@@ -10,34 +10,6 @@ const handle_1 = require("../handle");
 const message_1 = require("../routerHelper/message");
 const routerTemplate_1 = require("../routerHelper/routerTemplate");
 const router = express_1.default.Router();
-// 로그인 회원가입시 RSA 공개 개인키 방식 ㄱ
-router.route('/login')
-    .post(routerTemplate_1.RouterTemplate.create({
-    validations: [
-        {
-            name: 'username',
-            type: 'string',
-            regex: /[\d|\w]{1,100}/
-        },
-        {
-            name: 'password',
-            type: 'string',
-            regex: /[\w|\d]{1,128}/
-        },
-    ],
-    hook: async (req, res, message) => {
-        const username = req.body.username;
-        const password = req.body.password;
-        const accountRepo = handle_1.Handle.dbConnection.getRepository(account_1.Account);
-        try {
-            const account = await accountRepo.findOne({ username: username, password: password });
-            req.session.accountId = account.id; // 세션 객체로 만들면 관리 좋음
-        }
-        catch (err) {
-            message.code = message_1.Message.DefaultCode.ACTION_FAIL;
-        }
-    }
-}));
 router.route('') //create
     .put(routerTemplate_1.RouterTemplate.create({
     validations: [
@@ -73,12 +45,6 @@ router.route('') //create
             message.code = message_1.Message.DefaultCode.ACTION_FAIL;
             return;
         }
-    }
-}));
-router.route('/logout')
-    .post(routerTemplate_1.RouterTemplate.create({
-    hook: async (req, res, message) => {
-        req.session.accountId = undefined;
     }
 }));
 router.route('/isExistUsername')
@@ -133,17 +99,6 @@ router.route('/:accountId')
             }
         }
         catch (err) {
-            message.data = false;
-        }
-    }
-}));
-router.route('/isLogined')
-    .post(routerTemplate_1.RouterTemplate.create({
-    hook: async (req, res, message) => {
-        if (req.session.accountId) {
-            message.data = true;
-        }
-        else {
             message.data = false;
         }
     }

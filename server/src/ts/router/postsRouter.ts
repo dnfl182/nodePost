@@ -73,7 +73,7 @@ router.route('/')
             {
                 name: 'content',
                 type: 'string',
-                regex: /[\s\S]{1,500}/
+                regex: /[\s\S]{1,3000}/
             },
         ],
         hook: async (req: express.Request, res: express.Response, message: Message) => {
@@ -104,15 +104,15 @@ router.route('/page/:page')
             if(validator.isNumeric(req.params.page)) {
                 const page = Number(req.params.page);
                 try {
-                    const result = await createQueryBuilder('post').orderBy('id', 'DESC')
+                    const result = await createQueryBuilder('Post').orderBy('Post.id', 'DESC')
                         .offset((page - 1) * ammountPerPage).limit(ammountPerPage).leftJoinAndSelect('Post.account', 'account').getMany();
                     const posts = [];
                     for(const post of result) {
                         posts.push({
-                            username: post["account"]["username"],
-                            title: post["account"],
+                            username: (post["account"]["username"]) ? post["account"]["username"]: "Unknown",
+                            title: post["title"],
                             content: post["content"],
-                            id:  posts["id"]
+                            id:  post["id"]
                         })
                     }
                     message.data = posts;

@@ -1,19 +1,19 @@
 import React from 'react'
-import { Accordion } from 'react-bootstrap';
-import { AccountsRequest } from '../../request/accountsRequest';
+import { SessionRequest } from '../../request/sessionRequest';
+import { SessionChangeEventRevoker } from '../../revoker/sessionChangeEventRevoker';
 export class Nav extends React.Component<{}, {
     isLogined: boolean;
-
+    sessionChangeEventRevokerKey?: string
 }> {
     constructor(props: any) {
         super(props);
         this.state = {
-            isLogined: false
+            isLogined: false,
+            sessionChangeEventRevokerKey: undefined
         }
-        this.updateIsLogined(); // 업데이트 어떻게 
     }
-    updateIsLogined = async () => {
-        let isLogiend = await AccountsRequest.isLogined();
+    updateIsLogined = async () => { 
+        let isLogiend = await SessionRequest.isLogined();
         if(isLogiend === undefined) {
             isLogiend = false;
         }
@@ -24,10 +24,9 @@ export class Nav extends React.Component<{}, {
             newState.isLogined = isLogiend;
             return newState;
         });
-
     }
     logout = async () => {
-        const result = await AccountsRequest.logout();
+        const result = await SessionRequest.logout();
         if(result === true) {
                 this.setState((state) => {
                 const newState = {...state};
@@ -36,7 +35,19 @@ export class Nav extends React.Component<{}, {
             });
         }
     }
+    componentDidMount() {
+        this.updateIsLogined();
+        this.setState( (state) => {
+            const newState = {...state};
+            newState.sessionChangeEventRevokerKey = SessionChangeEventRevoker.addListener(this.updateIsLogined);
+            return newState;
+        });
+    }
+    componentWillUnmount() {
+        SessionChangeEventRevoker.removeListener(this.state.sessionChangeEventRevokerKey);
+    }
     render() {
+        
         return (
             <div className = 'w-100 mb-3' style = {{background: "#333333", height: "100px"}}>
                 <div className = "row h-100">
@@ -51,11 +62,11 @@ export class Nav extends React.Component<{}, {
                                 if(!this.state.isLogined) {
                                     return(
                                         <a href = "#/accounts/login">
-                                        <button className = "btn btn-lg btn-success w-100 h-100" style = {{borderRadius: "0px"}}> 로그인 </button>
+                                            <button className = "btn btn-lg btn-success w-100 h-100" style = {{borderRadius: "0px"}}> 로그인 </button>
                                         </a>
                                     );
                                 } else {
-                                    return <button onClick = {this.logout} className = "btn btn-lg btn-success w-100 h-100"> 로그아웃 </button>
+                                    return <button onClick = {this.logout} className = "btn btn-lg btn-success w-100 h-100" style = {{borderRadius: "0px"}}> 로그아웃 </button>
                                 }
                             })())
                         }

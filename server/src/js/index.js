@@ -10,20 +10,25 @@ const handle_1 = require("./handle");
 const path_1 = __importDefault(require("path"));
 const accountsRouter_1 = __importDefault(require("./router/accountsRouter"));
 const postsRouter_1 = __importDefault(require("./router/postsRouter"));
+const sessionRouter_1 = __importDefault(require("./router/sessionRouter"));
 const app = express_1.default();
 app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../public')));
-app.use(express_1.default.json());
+app.use(express_1.default.json({
+    limit: 12000
+}));
 app.use(express_session_1.default({
     secret: 'chickenisgood',
     resave: false,
     saveUninitialized: false
 }));
 app.use((req, res, next) => {
-    console.log('바디', req.body, req.params, req.query);
+    console.log('URL', req.url);
+    console.log('바디', req.body);
     next();
 });
 app.use('/accounts', accountsRouter_1.default);
 app.use('/posts', postsRouter_1.default);
+app.use('/session', sessionRouter_1.default);
 app.use((req, res, next) => {
     if (req.method === "GET") {
         res.type("html");
