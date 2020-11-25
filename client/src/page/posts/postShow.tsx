@@ -109,7 +109,7 @@ export class PostShow extends React.Component<{postId: number} , {
                     <p id = "textUsername">{this.state.username}</p>
                 </div>
                 <div className = "col-12 border-bottom">
-                    <p id = "textContent">{this.state.content}</p>
+                    <pre id = "textContent">{this.state.content}</pre>
                 </div>
                 {
                     this.renderBtnDeletePost()

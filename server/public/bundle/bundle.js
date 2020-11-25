@@ -54097,7 +54097,7 @@ var PostShow = /** @class */ (function (_super) {
                 react_1.default.createElement("div", { className: "col-12 border-bottom" },
                     react_1.default.createElement("p", { id: "textUsername" }, this.state.username)),
                 react_1.default.createElement("div", { className: "col-12 border-bottom" },
-                    react_1.default.createElement("p", { id: "textContent" }, this.state.content)),
+                    react_1.default.createElement("pre", { id: "textContent" }, this.state.content)),
                 this.renderBtnDeletePost()),
             react_1.default.createElement("h3", { className: "text-success", id: "textSuccess" }, this.state.textSuccess),
             react_1.default.createElement("h3", { className: "text-danger", id: "textError" }, this.state.textError)));
