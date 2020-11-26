@@ -4,7 +4,8 @@ enum DefaultCode {
     VALIDATION_ERROR,
     NOT_FOUND,
     ACTION_FAIL,
-    PERMISSION_ERROR
+    PERMISSION_ERROR,
+    KEY_NOT_FOUND,
 }
 export class Message {
     constructor(public code: number, public data: any) {

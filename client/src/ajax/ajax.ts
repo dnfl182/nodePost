@@ -34,7 +34,6 @@ export class AJAX {
             xhr.onreadystatechange = () => {
                 if(xhr.readyState == 4) {
                         resolve(xhr.response);
-                        //console.error('AJAX: JSON 아닌 데이터 침입')
                 }
             }
             xhr.onerror = xhr.onabort = () => {

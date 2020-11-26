@@ -1,13 +1,14 @@
 import { AJAX } from "../ajax/ajax";
 import { Message } from "../ajax/message";
 import { SessionChangeEventRevoker } from "../revoker/sessionChangeEventRevoker";
-
+import forge from 'node-forge'
 export class SessionRequest {
     public static async login(username: string, password: string): Promise<boolean>{
+        const publicKey = forge.pki.publicKeyFromPem((await AJAX.ajax(AJAX.Method.GET, '/publicKey')).data);
         const result = await AJAX.ajax(AJAX.Method.PUT, '/session', {
             username: username,
-            password: password
-        })
+            password: publicKey.encrypt(password)
+        });
         if(result.code !== Message.DefaultCode.SUCCESS) {
             return false;
         } else {

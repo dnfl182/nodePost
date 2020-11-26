@@ -6,6 +6,7 @@ import path from 'path'
 import accountsRouter from './router/accountsRouter'
 import postsRouter from './router/postsRouter'
 import sessionRouter from './router/sessionRouter'
+import securiyRouter from './router/securityRouter'
 const app = express();
 app.use(express.static(path.resolve(__dirname, '../../public')));
 app.use(express.json({
@@ -25,6 +26,7 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 app.use('/accounts', accountsRouter);
 app.use('/posts', postsRouter);
 app.use('/session', sessionRouter);
+app.use('/', securiyRouter);
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     if(req.method === "GET") {

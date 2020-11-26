@@ -11,6 +11,7 @@ const path_1 = __importDefault(require("path"));
 const accountsRouter_1 = __importDefault(require("./router/accountsRouter"));
 const postsRouter_1 = __importDefault(require("./router/postsRouter"));
 const sessionRouter_1 = __importDefault(require("./router/sessionRouter"));
+const securityRouter_1 = __importDefault(require("./router/securityRouter"));
 const app = express_1.default();
 app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../public')));
 app.use(express_1.default.json({
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 app.use('/accounts', accountsRouter_1.default);
 app.use('/posts', postsRouter_1.default);
 app.use('/session', sessionRouter_1.default);
+app.use('/', securityRouter_1.default);
 app.use((req, res, next) => {
     if (req.method === "GET") {
         res.type("html");

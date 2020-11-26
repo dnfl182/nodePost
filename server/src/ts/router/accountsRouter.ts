@@ -4,6 +4,7 @@ import { Account } from '../entity/account';
 import { Handle } from '../handle';
 import { Message } from '../routerHelper/message';
 import { RouterTemplate } from '../routerHelper/routerTemplate';
+import forge from 'node-forge'
 const router = express.Router();
 
 router.route('')    //create
@@ -17,10 +18,14 @@ router.route('')    //create
             {
                 name: 'password',
                 type: 'string',
-                regex: /[\w|\d]{1,128}/
+                //regex: /[\w|\d]{1,128}/
             },
         ],
         hook: async (req: express.Request, res: express.Response, message: Message) => {
+            if(!req.session.publicKey) {
+                message.code = Message.DefaultCode.KEY_NOT_FOUND;
+                return;
+            }
             const username = req.body.username;
             const password = req.body.password;
             const accountRepo = Handle.dbConnection.getRepository(Account);
@@ -31,9 +36,20 @@ router.route('')    //create
                     return;
                 } 
             } catch (err) {
+                message.code = Message.DefaultCode.ACTION_FAIL;
+                return;
+            }
+            let privateKey, decryptedPassword, hashedPassword;
+            try { 
+                privateKey = forge.pki.privateKeyFromPem(req.session.privateKey);
+                decryptedPassword = privateKey.decrypt(password);
+                hashedPassword = forge.md.sha512.create().update(decryptedPassword).digest().toHex();
+            } catch (err) {
+                message.code = Message.DefaultCode.VALIDATION_ERROR;
+                return;
             }
             try { 
-                const account = await accountRepo.create({username: username, password: password});
+                const account = await accountRepo.create({username: username, password: hashedPassword});
                 accountRepo.save(account);
             } catch (err) {
                 message.code = Message.DefaultCode.ACTION_FAIL;

@@ -9,6 +9,7 @@ const account_1 = require("../entity/account");
 const handle_1 = require("../handle");
 const message_1 = require("../routerHelper/message");
 const routerTemplate_1 = require("../routerHelper/routerTemplate");
+const node_forge_1 = __importDefault(require("node-forge"));
 const router = express_1.default.Router();
 router.route('') //create
     .put(routerTemplate_1.RouterTemplate.create({
@@ -21,10 +22,13 @@ router.route('') //create
         {
             name: 'password',
             type: 'string',
-            regex: /[\w|\d]{1,128}/
         },
     ],
     hook: async (req, res, message) => {
+        if (!req.session.publicKey) {
+            message.code = message_1.Message.DefaultCode.KEY_NOT_FOUND;
+            return;
+        }
         const username = req.body.username;
         const password = req.body.password;
         const accountRepo = handle_1.Handle.dbConnection.getRepository(account_1.Account);
@@ -36,9 +40,21 @@ router.route('') //create
             }
         }
         catch (err) {
+            message.code = message_1.Message.DefaultCode.ACTION_FAIL;
+            return;
+        }
+        let privateKey, decryptedPassword, hashedPassword;
+        try {
+            privateKey = node_forge_1.default.pki.privateKeyFromPem(req.session.privateKey);
+            decryptedPassword = privateKey.decrypt(password);
+            hashedPassword = node_forge_1.default.md.sha512.create().update(decryptedPassword).digest().toHex();
+        }
+        catch (err) {
+            message.code = message_1.Message.DefaultCode.VALIDATION_ERROR;
+            return;
         }
         try {
-            const account = await accountRepo.create({ username: username, password: password });
+            const account = await accountRepo.create({ username: username, password: hashedPassword });
             accountRepo.save(account);
         }
         catch (err) {
