@@ -8,7 +8,7 @@
 ### Webpack
 ### Express
 ### TypeOrm
-### Postgresql
+### PostgreSQL
 ### React
 ### React-Router
 
