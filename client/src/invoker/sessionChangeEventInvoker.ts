@@ -11,7 +11,7 @@ export class SessionChangeEventInvoker {    //EventRevoker  Store 클래스와 �
     public static removeListener(key: string) {
         this.listenerMap[key] = undefined;
     }
-    public static revoke() {
+    public static invoke() {
         for(const key in this.listenerMap) {
             //console.log(this.listenerMap[key]);
             if(this.listenerMap[key]) {

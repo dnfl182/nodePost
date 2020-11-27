@@ -12,7 +12,7 @@ export class SessionRequest {
         if(result.code !== Message.DefaultCode.SUCCESS) {
             return false;
         } else {
-            SessionChangeEventInvoker.revoke();
+            SessionChangeEventInvoker.invoke();
             return true;
         }
     }
@@ -21,7 +21,7 @@ export class SessionRequest {
         if(result.code !== Message.DefaultCode.SUCCESS) {
             return false;
         } else {
-            SessionChangeEventInvoker.revoke();
+            SessionChangeEventInvoker.invoke();
             return true;
         }
     }
