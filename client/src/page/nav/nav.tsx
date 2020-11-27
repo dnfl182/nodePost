@@ -1,6 +1,6 @@
 import React from 'react'
 import { SessionRequest } from '../../request/sessionRequest';
-import { SessionChangeEventRevoker } from '../../revoker/sessionChangeEventRevoker';
+import { SessionChangeEventInvoker } from '../../invoker/sessionChangeEventInvoker';
 export class Nav extends React.Component<{}, {
     isLogined: boolean;
     sessionChangeEventRevokerKey?: string
@@ -39,12 +39,12 @@ export class Nav extends React.Component<{}, {
         this.updateIsLogined();
         this.setState( (state) => {
             const newState = {...state};
-            newState.sessionChangeEventRevokerKey = SessionChangeEventRevoker.addListener(this.updateIsLogined);
+            newState.sessionChangeEventRevokerKey = SessionChangeEventInvoker.addListener(this.updateIsLogined);
             return newState;
         });
     }
     componentWillUnmount() {
-        SessionChangeEventRevoker.removeListener(this.state.sessionChangeEventRevokerKey);
+        SessionChangeEventInvoker.removeListener(this.state.sessionChangeEventRevokerKey);
     }
     render() {
         

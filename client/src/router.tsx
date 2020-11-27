@@ -28,8 +28,7 @@ export class Router extends React.Component {
                                     <Route exact path = "/create" component = {PostCreate}/>
                                     <Route exact path = "/page/:nowPage" component = {
                                         ({match}) => {
-                                            const params = match.params;
-                                            const nowPage = Number(params.nowPage);
+                                            const nowPage = Number(match.params.nowPage);
                                             if(Number.isNaN(nowPage)) {
                                                 return <div></div>;
                                             } else {
@@ -39,8 +38,7 @@ export class Router extends React.Component {
                                     }/>
                                     <Route exact path = "/:postId" component = {
                                             ({match}) => {
-                                                const params = match.params;
-                                                const postId = Number(params.postId);
+                                                const postId = Number(match.params.postId);
                                                 if(Number.isNaN(postId)) {
                                                     return <div></div>;
                                                 } else {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { PostsRequest } from '../../request/postsRequest';
 import { SessionRequest } from '../../request/sessionRequest';
-import { SessionChangeEventRevoker } from '../../revoker/sessionChangeEventRevoker';
+import { SessionChangeEventInvoker } from '../../invoker/sessionChangeEventInvoker';
 export class PostShow extends React.Component<{postId: number} , {
     title: string;
     username: string;
@@ -30,12 +30,12 @@ export class PostShow extends React.Component<{postId: number} , {
         this.updateLoginedAccountId();
         this.setState((state) => { 
             const newState = {...state};
-            newState.sessionChangeEventRevokerKey = SessionChangeEventRevoker.addListener(this.updateLoginedAccountId);
+            newState.sessionChangeEventRevokerKey = SessionChangeEventInvoker.addListener(this.updateLoginedAccountId);
             return newState;
         });
     }
     componentWillUnmount() {
-        SessionChangeEventRevoker.removeListener(this.state.sessionChangeEventRevokerKey);
+        SessionChangeEventInvoker.removeListener(this.state.sessionChangeEventRevokerKey);
     }
     updateLoginedAccountId = async () => { 
         const sessionAccountId = await SessionRequest.getAccountId();

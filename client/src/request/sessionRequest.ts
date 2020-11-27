@@ -1,6 +1,6 @@
 import { AJAX } from "../ajax/ajax";
 import { Message } from "../ajax/message";
-import { SessionChangeEventRevoker } from "../revoker/sessionChangeEventRevoker";
+import { SessionChangeEventInvoker } from "../invoker/sessionChangeEventInvoker";
 import forge from 'node-forge'
 export class SessionRequest {
     public static async login(username: string, password: string): Promise<boolean>{
@@ -12,7 +12,7 @@ export class SessionRequest {
         if(result.code !== Message.DefaultCode.SUCCESS) {
             return false;
         } else {
-            SessionChangeEventRevoker.revoke();
+            SessionChangeEventInvoker.revoke();
             return true;
         }
     }
@@ -21,7 +21,7 @@ export class SessionRequest {
         if(result.code !== Message.DefaultCode.SUCCESS) {
             return false;
         } else {
-            SessionChangeEventRevoker.revoke();
+            SessionChangeEventInvoker.revoke();
             return true;
         }
     }

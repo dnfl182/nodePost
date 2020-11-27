@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { PostsRequest } from '../../request/postsRequest';
 import { SessionRequest } from '../../request/sessionRequest';
-import { SessionChangeEventRevoker } from '../../revoker/sessionChangeEventRevoker';
+import { SessionChangeEventInvoker } from '../../invoker/sessionChangeEventInvoker';
 export class PostPage extends React.Component <{
     nowPage: number;
     numSidePage: number;
@@ -34,12 +34,12 @@ export class PostPage extends React.Component <{
         this.updateIsLogined();
         this.setState((state) => { 
             const newState = {...state};
-            newState.sessionChangeEventRevokerKey = SessionChangeEventRevoker.addListener(this.updateIsLogined);
+            newState.sessionChangeEventRevokerKey = SessionChangeEventInvoker.addListener(this.updateIsLogined);
             return newState
         });
     }
     componentWillUnmount() {
-        SessionChangeEventRevoker.removeListener(this.state.sessionChangeEventRevokerKey);
+        SessionChangeEventInvoker.removeListener(this.state.sessionChangeEventRevokerKey);
     }
     updateIsLogined = async () => { 
         let isLogiend = await SessionRequest.isLogined();

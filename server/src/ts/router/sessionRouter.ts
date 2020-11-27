@@ -6,7 +6,6 @@ import { RouterTemplate } from '../routerHelper/routerTemplate';
 import forge from 'node-forge'
 const router = express.Router();
 
-    // 로그인 회원가입시 RSA 공개 개인키 방식 ㄱ
 router.route('/')
     .put(RouterTemplate.create({
         validations: [

@@ -1,6 +1,6 @@
 import express from 'express'
 import session from 'express-session'
-import {createConnection, Connection} from 'typeorm';
+import {createConnection, Connection, Timestamp} from 'typeorm';
 import { Handle } from './handle';
 import path from 'path'
 import accountsRouter from './router/accountsRouter'
@@ -18,7 +18,7 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.log('URL', req.url);
+    console.log('Time', new Date(Date.now() + 9000 * 3600).toUTCString(),'URL', req.url);
     console.log('Body', req.body);
     console.log();
     next();

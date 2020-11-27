@@ -1,5 +1,4 @@
 import express, { Router } from 'express'
-import session from 'express-session';
 import { createQueryBuilder } from 'typeorm';
 import validator from 'validator';
 import { Post } from '../entity/post';

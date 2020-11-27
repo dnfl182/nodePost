@@ -1,6 +1,5 @@
 import {v4 as uuid} from 'uuid'
-import { IgnorePlugin } from 'webpack';
-export class SessionChangeEventRevoker {    //EventRevoker  Store 클래스와 부모 클래스 상속으로 범용성 높이기 가능
+export class SessionChangeEventInvoker {    //EventRevoker  Store 클래스와 부모 클래스 상속으로 범용성 높이기 가능
     private static listenerMap: {
         [key: string]: {(): void};
     } = {};
