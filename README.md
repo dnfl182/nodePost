@@ -22,10 +22,6 @@
 ### Single Page Application
 ###### React-Router의 HashRouter와 AJAX을 통해 구현하였습니다.
 ###### 새로고침 할 필요없이 하나의 bundle.js로 모든 페이지를 구현합니다.
-### Restful API
-###### GET /posts/:postId
-###### PUT /posts/:postId
-###### DELETE /posts/:postId
 ### 로그인/로그아웃/회원가입
 ###### Session을 사용하여 각 사용자의 정보를 저장하여 로그인/로그아웃을 구현하였습니다.
 ###### 서버에서 배포하는 공개키를 기반으로 암호화 하여 민감한 정보를 유출되지않게 하였습니다.
