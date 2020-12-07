@@ -1,7 +1,7 @@
 # NodePost
 
 
-# 사용 기술 스택
+# 기술 스택
 
 ### Javascript
 ### Typescript
