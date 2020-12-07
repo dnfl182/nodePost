@@ -19,7 +19,7 @@
 
 
 # 구현 내용
-## 간단한 게시판입니다.
+### 간단한 게시판입니다.
 ### Single Page Application
 ###### React-Router의 HashRouter와 AJAX을 통해 구현하였습니다.
 ###### 새로고침 할 필요없이 하나의 bundle.js로 모든 페이지를 구현합니다.
